@@ -22,7 +22,8 @@ AItem::AItem()
 void AItem::BeginPlay()
 {
 	Super::BeginPlay();
-	Sphere->OnComponentBeginOverlap.AddDynamic(this, &AItem::OnSphereOverlap);
+	Sphere->OnComponentBeginOverlap.AddDynamic(this, &AItem::OnComponentBeginOverlap);
+	Sphere->OnComponentEndOverlap.AddDynamic(this, &AItem::OnComponentEndOverlap);
 
 }
 
@@ -36,14 +37,20 @@ float AItem::TransformedCos()
 	return Amplitude * FMath::Cos(RunningTime * TimeConstant);
 }
 
-void AItem::OnSphereOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+void AItem::OnComponentBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	const FString OtherActorName = OtherActor->GetName();
 	if(GEngine)
 	{
-		GEngine->AddOnScreenDebugMessage(1, 30.f, FColor::Cyan, OtherActorName);
+		GEngine->AddOnScreenDebugMessage(1, 30.f, FColor::Cyan, "Begin Overlap");
 	}
-	UE_LOG(LogTemp, Warning, TEXT("A"));
+}
+
+void AItem::OnComponentEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
+{
+	if(GEngine)
+	{
+		GEngine->AddOnScreenDebugMessage(1, 30.f, FColor::Cyan, "End Overlap");
+	}	
 }
 
 // Called every frame
