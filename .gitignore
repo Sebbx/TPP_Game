@@ -1,10 +1,8 @@
-
 Binaries
 DerivedDataCache
 Intermediate
 Saved
 Build
-Content
 **/BlackAlder
 **/Landscape
 **/MedievalDungeon
@@ -23,3 +21,7 @@ Content
 *.suo
 *.xcodeproj
 *.xcworkspace
+Content/AnimalVarietyPack/
+Content/Mixamo/YBot/
+Content/MSPresets/
+Content/STF/
