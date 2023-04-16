@@ -24,5 +24,6 @@ void UMannyAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 	{
 		GroundSpeed = UKismetMathLibrary::VSizeXY(MannyCharacterMovement->Velocity);
 		bIsFalling = MannyCharacterMovement->IsFalling();
+		CharacterState = MannyCharacter->GetCharacterState();
 	}
 }

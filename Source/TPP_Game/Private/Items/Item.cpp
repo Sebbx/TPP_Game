@@ -2,6 +2,7 @@
 
 #include "Item.h"
 
+#include "Characters/MyCharacter.h"
 #include "Components/SphereComponent.h"
 
 // Sets default values
@@ -39,17 +40,19 @@ float AItem::TransformedCos()
 
 void AItem::OnComponentBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	if(GEngine)
+	AMyCharacter* MannyCharacter = Cast<AMyCharacter>(OtherActor);
+	if(MannyCharacter)
 	{
-		GEngine->AddOnScreenDebugMessage(1, 30.f, FColor::Cyan, "Begin Overlap");
+		MannyCharacter->SetOverlapingItem(this);
 	}
 }
 
 void AItem::OnComponentEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {
-	if(GEngine)
+	AMyCharacter* MannyCharacter = Cast<AMyCharacter>(OtherActor);
+	if(MannyCharacter)
 	{
-		GEngine->AddOnScreenDebugMessage(1, 30.f, FColor::Cyan, "End Overlap");
+		MannyCharacter->SetOverlapingItem(nullptr);
 	}	
 }
 
@@ -57,8 +60,11 @@ void AItem::OnComponentEndOverlap(UPrimitiveComponent* OverlappedComponent, AAct
 void AItem::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	RunningTime += DeltaTime;
 
-	AddActorWorldOffset(FVector(0, 0, TransformedSin()));
+	if(bDoWaving)
+	{
+		RunningTime += DeltaTime;
+		AddActorWorldOffset(FVector(0, 0, TransformedSin()));
+	}
 }
 
