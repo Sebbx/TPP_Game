@@ -11,6 +11,7 @@ class UCameraComponent;
 class UInputAction;
 class UInputMappingContext;
 class AItem;
+class UAnimMontage;
 
 UCLASS()
 class TPP_GAME_API AMyCharacter : public ACharacter
@@ -64,6 +65,11 @@ private:
 	UPROPERTY(VisibleInstanceOnly)
 	AItem* OverlappingItem;
 
+	/**
+	 * Animation montages
+	 */
+	UPROPERTY(EditDefaultsOnly, Category = Montages)
+	UAnimMontage* AttackMontage;
 
 public:
 	FORCEINLINE void SetOverlapingItem(AItem* Item) { OverlappingItem = Item; }
