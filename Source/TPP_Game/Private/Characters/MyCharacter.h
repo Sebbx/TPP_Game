@@ -27,6 +27,9 @@ public:
 protected:
 	virtual void BeginPlay() override;
 
+	/**
+	 * Input mapping
+	 */
 	UPROPERTY(EditAnywhere, Category = Input)
 	UInputMappingContext* MyCharContext;
 
@@ -48,13 +51,28 @@ protected:
 	UPROPERTY(EditAnywhere, Category = Input)
 	UInputAction* DodgeAction;
 
+	/**
+	* Callbacks for input
+	*/
 	void Move(const FInputActionValue& Value);
 	void Look(const FInputActionValue& Value);
 	void EKeyPressed();
 	void Attack();
 
+	/**
+	 * Play montage functions
+	 */
+	void PlayAttackMontage() const;
+
+	UFUNCTION(BlueprintCallable)
+	void AttackEnd();
+	 
+
 private:
 	ECharacterState CharacterState = ECharacterState::ECS_Unequipped;
+
+	UPROPERTY(BlueprintReadWrite, meta = (AllowPrivateAccess = true))
+	EActionState ActionState = EActionState::EAS_Unoccupied;
 
 	UPROPERTY(EditAnywhere)
 	UCameraComponent* ViewCamera;
@@ -64,6 +82,8 @@ private:
 
 	UPROPERTY(VisibleInstanceOnly)
 	AItem* OverlappingItem;
+
+	bool CanAttack();
 
 	/**
 	 * Animation montages

@@ -36,6 +36,11 @@ void AMyCharacter::BeginPlay()
 	
 }
 
+void AMyCharacter::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+}
+
 void AMyCharacter::Move(const FInputActionValue& Value)
 {
 	const FVector2d MovementVector = Value.Get<FVector2d>();
@@ -55,7 +60,6 @@ void AMyCharacter::Look(const FInputActionValue& Value)
 
 	AddControllerPitchInput(LookAxisVector.Y);
 	AddControllerYawInput(LookAxisVector.X);  
-
 }
 
 void AMyCharacter::EKeyPressed()
@@ -71,12 +75,21 @@ void AMyCharacter::EKeyPressed()
 
 void AMyCharacter::Attack()
 {
-	//UE_LOG(LogTemp, Warning, TEXT("Attack"));
+	if (CanAttack())
+	{
+		PlayAttackMontage();
+		ActionState = EActionState::EAS_Attacking;
+	}
+}
+
+void AMyCharacter::PlayAttackMontage() const
+{
+	//UE_LOG(LogTemp, Warning, TEXT("Attack montage"));
 	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
 	if (AnimInstance && AttackMontage)
 	{
 		AnimInstance->Montage_Play(AttackMontage);
-		int32 Selection = FMath::RandRange(0, 1);
+		const int32 Selection = FMath::RandRange(0, 1);
 		FName SectionName = FName();
 		switch (Selection)
 		{
@@ -88,10 +101,16 @@ void AMyCharacter::Attack()
 	}
 }
 
-void AMyCharacter::Tick(float DeltaTime)
+void AMyCharacter::AttackEnd()
 {
-	Super::Tick(DeltaTime);
+	ActionState = EActionState::EAS_Unoccupied;
 }
+
+bool AMyCharacter::CanAttack()
+{
+	return (ActionState == EActionState::EAS_Unoccupied && CharacterState != ECharacterState::ECS_Unequipped);
+}
+
 
 void AMyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
@@ -105,7 +124,5 @@ void AMyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 		EnhancedInputComponent->BindAction(AttackAction, ETriggerEvent::Triggered, this, &AMyCharacter::Attack);
 		//EnhancedInputComponent->BindAction(DodgeAction, ETriggerEvent::Triggered, this, &AMyCharacter::Dodge);
 	}
-
-
 }
 
