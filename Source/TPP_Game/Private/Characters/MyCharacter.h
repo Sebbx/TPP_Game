@@ -50,6 +50,7 @@ protected:
 	void Move(const FInputActionValue& Value);
 	void Look(const FInputActionValue& Value);
 	void EKeyPressed();
+	void Attack();
 
 private:
 	ECharacterState CharacterState = ECharacterState::ECS_Unequipped;
