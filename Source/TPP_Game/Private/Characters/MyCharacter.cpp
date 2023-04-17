@@ -43,15 +43,19 @@ void AMyCharacter::Tick(float DeltaTime)
 
 void AMyCharacter::Move(const FInputActionValue& Value)
 {
-	const FVector2d MovementVector = Value.Get<FVector2d>();
-	
-	const FRotator Rotation = Controller->GetControlRotation();
-	const FRotator YawRotation(0.f, Rotation.Yaw, 0.f);
-	
-	const FVector ForwardDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
-	AddMovementInput(ForwardDirection, MovementVector.Y);
-	const FVector RightDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
-	AddMovementInput(RightDirection, MovementVector.X);
+	if(ActionState == EActionState::EAS_Attacking) return;
+	if (Controller)
+	{
+		const FVector2d MovementVector = Value.Get<FVector2d>();
+		
+		const FRotator Rotation = Controller->GetControlRotation();
+		const FRotator YawRotation(0.f, Rotation.Yaw, 0.f);
+		
+		const FVector ForwardDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
+		AddMovementInput(ForwardDirection, MovementVector.Y);
+		const FVector RightDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
+		AddMovementInput(RightDirection, MovementVector.X);
+	}
 }
 
 void AMyCharacter::Look(const FInputActionValue& Value)

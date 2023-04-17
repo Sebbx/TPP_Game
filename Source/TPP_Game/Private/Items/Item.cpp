@@ -61,7 +61,7 @@ void AItem::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if(bDoWaving)
+	if(ItemState == EItemState::EIS_Hovering)
 	{
 		RunningTime += DeltaTime;
 		AddActorWorldOffset(FVector(0, 0, TransformedSin()));
